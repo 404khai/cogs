@@ -1,0 +1,7 @@
+# Reference images (stock art and third-party screenshots): kept local, not published
+references/
+
+.DS_Store
+node_modules/
+dist/
+*.local
