@@ -10,14 +10,15 @@
 
 ## What's inside
 
-- **17 chassis.** Octa, Capsule, Tabbed, Hexa, Keyhole, Chamfer, Bloom, Plate, Sprocket, Orb, Keystone, Dome, Clamp, Bracket, Crest, Cross and Ticket. Each one is pure parametric SVG with a machined bevel, fasteners and a recessed visor. When the status light sits above the visor, it is cut into a notch of the visor recess.
+- **20 chassis.** Octa, Capsule, Tabbed, Hexa, Keyhole, Chamfer, Bloom, Plate, Sprocket, Orb, Keystone, Dome, Clamp, Bracket, Crest, Cross, Ticket, Rampart, Lynx and Fold. Each one is pure parametric SVG with a machined bevel, fasteners and a recessed visor. When the status light sits above the visor, it is cut into a notch of the visor recess.
 - **12 expressions.** Idle, Happy, Sleepy, Angry, Sad, Surprised, Suspicious, Wink, Focused, Skeptic, Bored and Pondering. They're built from lids, tilts and cheek crescents over dot-matrix LED eyes and tween smoothly between states.
 - **Alive by default.** The eyes follow your cursor, glance around when idle and blink on their own schedule.
-- **4 display modes.** Eyes, Voice (waveform), Typing (dots) and Glyph (pixel robot).
+- **8 display modes.** Eyes, Voice (waveform), Typing (dots), Glyph (pixel robot), and four agent states: Thinking (chasing LED ring), Search (radar sweep), Coding (scrolling terminal) and Working (a train of meshing LED gears). The agent states animate with SVG SMIL, so exported SVGs keep moving.
 - **Power bars.** Core charge (glow), Curiosity (gaze) and Blink rate.
 - **Export and share.** SVG and PNG at 1024px, plus a share link that stores the cog in the URL hash.
 - **JSON in and out.** Copy, download, edit, paste or upload JSON to rebuild a cog. Pasting cog JSON anywhere on the page builds it.
 - **Docs and changelog.** `/docs` is the manual, with ⌘K search and live chassis and expression galleries. `/changelog` lists every release.
+- **Self-assembling roster.** Roster units draft themselves in blueprint lines, then get paint, fasteners, a visor and power as they scroll into view.
 - **The assembly line.** In the footer, a meshing gear train drives a conveyor, and units ride through a QA scanner while Flange supervises.
 
 ## Cog JSON
@@ -41,9 +42,9 @@
 
 | Field | Values |
 | --- | --- |
-| `chassis` | `octa` `capsule` `tab` `hex` `drop` `chamfer` `bloom` `plate` `gear` `orb` `keystone` `dome` `clamp` `bracket` `crest` `cross` `ticket` |
+| `chassis` | `octa` `capsule` `tab` `hex` `drop` `chamfer` `bloom` `plate` `gear` `orb` `keystone` `dome` `clamp` `bracket` `crest` `cross` `ticket` `rampart` `lynx` `fold` |
 | `expression` | `idle` `happy` `sleepy` `angry` `sad` `surprised` `suspicious` `wink` `focused` `skeptic` `bored` `lookup` |
-| `screen` | `eyes` `wave` `dots` `glyph` |
+| `screen` | `eyes` `wave` `dots` `glyph` `think` `search` `code` `work` |
 | `optics` | `auto` `mono` `dual` |
 | `color`, `glow` | `#rrggbb` |
 | `charge`, `curiosity`, `blink` | `0` – `1` |

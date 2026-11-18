@@ -3,7 +3,7 @@ import { Blueprint } from './components/Blueprint';
 import { Studio } from './components/Studio';
 import { Roster } from './components/Roster';
 import { Footer, Nav } from './components/SiteChrome';
-import { DEFAULT, decodeConfig, encodeConfig } from './lib/config';
+import { DEFAULT, SCREENS, decodeConfig, encodeConfig } from './lib/config';
 import type { CogConfig } from './lib/config';
 import { CHASSIS } from './lib/chassis';
 import { EXPRESSIONS } from './lib/expressions';
@@ -43,7 +43,7 @@ export default function App() {
             <ul className="stats mono">
               <li><b>{String(CHASSIS.length).padStart(2, '0')}</b>Chassis</li>
               <li><b>{String(EXPRESSIONS.length).padStart(2, '0')}</b>Expressions</li>
-              <li><b>04</b>Displays</li>
+              <li><b>{String(SCREENS.length).padStart(2, '0')}</b>Displays</li>
               <li><b>∞</b>Units</li>
             </ul>
           </div>

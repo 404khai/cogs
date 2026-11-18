@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { gearPoints, roundedPoly } from '../lib/chassis';
+import { meshChain } from '../lib/gears';
 import { DEFAULT, LOGO } from '../lib/config';
 import type { CogConfig } from '../lib/config';
 import { reducedMotion } from '../lib/pointer';
@@ -15,27 +16,8 @@ const SEC_PER_TOOTH = 0.55;
 
 type Gear = { z: number; cx: number; cy: number; phase: number; dir: 1 | -1; tone?: 'volt' | 'ink' };
 
-function chain(start: { z: number; cx: number; cy: number; tone?: Gear['tone'] }, links: { z: number; deg: number; tone?: Gear['tone'] }[]): Gear[] {
-  const out: Gear[] = [{ ...start, phase: 0, dir: 1 }];
-  for (const l of links) {
-    const a = out[out.length - 1];
-    const ra = (M * a.z) / 2;
-    const rb = (M * l.z) / 2;
-    const phi = (l.deg * Math.PI) / 180;
-    const ta = (Math.PI * 2) / a.z;
-    const tb = (Math.PI * 2) / l.z;
-    const delta = (((a.phase - phi) % ta) + ta) % ta;
-    out.push({
-      z: l.z,
-      cx: a.cx + (ra + rb) * Math.cos(phi),
-      cy: a.cy + (ra + rb) * Math.sin(phi),
-      phase: phi + Math.PI - (delta / ta + 0.5) * tb,
-      dir: (a.dir * -1) as 1 | -1,
-      tone: l.tone,
-    });
-  }
-  return out;
-}
+const chain = (start: { z: number; cx: number; cy: number; tone?: Gear['tone'] }, links: { z: number; deg: number; tone?: Gear['tone'] }[]): Gear[] =>
+  meshChain<{ tone?: Gear['tone'] }>(M, start, links);
 
 const GEARS = [
   ...chain({ z: 26, cx: 150, cy: 130 }, [

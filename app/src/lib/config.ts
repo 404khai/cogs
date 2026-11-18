@@ -1,7 +1,18 @@
 import { CHASSIS } from './chassis';
 import { EXPRESSIONS } from './expressions';
 
-export type ScreenMode = 'eyes' | 'glyph' | 'wave' | 'dots';
+export type ScreenMode = 'eyes' | 'glyph' | 'wave' | 'dots' | 'think' | 'search' | 'code' | 'work';
+
+export const SCREENS: { id: ScreenMode; label: string; note: string }[] = [
+  { id: 'eyes', label: 'Eyes', note: 'The expression, with gaze and blinks.' },
+  { id: 'wave', label: 'Voice', note: 'A waveform for agents that are speaking.' },
+  { id: 'dots', label: 'Typing', note: 'Three bouncing dots while it composes.' },
+  { id: 'glyph', label: 'Glyph', note: 'A pixel robot icon on the dot matrix.' },
+  { id: 'think', label: 'Thinking', note: 'A light chases round a ring of LEDs while satellites orbit a breathing core.' },
+  { id: 'search', label: 'Search', note: 'A radar sweep; blips flare as the beam finds them.' },
+  { id: 'code', label: 'Coding', note: 'Code scrolls up a terminal above a blinking prompt.' },
+  { id: 'work', label: 'Working', note: 'A train of solid LED gears meshes and turns while the agent grinds through a job.' },
+];
 export type OpticsMode = 'auto' | 'mono' | 'dual';
 
 export type CogConfig = {
@@ -68,13 +79,13 @@ const mk = (p: Partial<CogConfig>): CogConfig => ({ ...DEFAULT, ...p });
 
 export const ROSTER: (CogConfig & { role: string })[] = [
   { ...mk({ name: 'Rivet', chassis: 'octa', color: '#7cc9ea' }), role: 'Code review' },
-  { ...mk({ name: 'Piston', chassis: 'capsule', color: '#e8603f', expression: 'focused' }), role: 'Incident triage' },
+  { ...mk({ name: 'Piston', chassis: 'capsule', color: '#e8603f', screen: 'think' }), role: 'Incident triage' },
   { ...mk({ name: 'Sprocket', chassis: 'tab', color: '#72c97c', expression: 'happy' }), role: 'Onboarding' },
-  { ...mk({ name: 'Gimbal', chassis: 'hex', color: '#9d8df0', expression: 'lookup' }), role: 'Research' },
+  { ...mk({ name: 'Gimbal', chassis: 'hex', color: '#9d8df0', screen: 'search' }), role: 'Research' },
   { ...mk({ name: 'Gasket', chassis: 'drop', color: '#d3d3cf', expression: 'suspicious', glow: '#bfefff' }), role: 'Security audit' },
   { ...mk({ name: 'Spindle', chassis: 'chamfer', color: '#e46fdc', screen: 'dots' }), role: 'Docs writer' },
   { ...mk({ name: 'Pinion', chassis: 'bloom', color: '#3657d8', screen: 'wave' }), role: 'Voice agent' },
-  { ...mk({ name: 'Ratchet', chassis: 'gear', color: '#ff6a2b', expression: 'angry', glow: '#ffb23f' }), role: 'CI runner' },
+  { ...mk({ name: 'Ratchet', chassis: 'gear', color: '#ff6a2b', screen: 'code', glow: '#ffb23f' }), role: 'CI runner' },
 ];
 
 const NAMES = [
@@ -96,7 +107,7 @@ export function randomConfig(prev: CogConfig): CogConfig {
     color: pick(PAINTS).hex,
     glow: Math.random() < 0.6 ? GLOWS[0].hex : pick(GLOWS).hex,
     expression: pick(EXPRESSIONS).id,
-    screen: r < 0.78 ? 'eyes' : r < 0.86 ? 'wave' : r < 0.94 ? 'dots' : 'glyph',
+    screen: r < 0.7 ? 'eyes' : SCREENS[1 + Math.floor(Math.random() * (SCREENS.length - 1))].id,
     optics: 'auto',
     pupils: Math.random() < 0.75,
   };
@@ -165,7 +176,7 @@ export function parseCog(text: string): { config: CogConfig; warnings: string[] 
       color: hex('color', DEFAULT.color),
       glow: hex('glow', DEFAULT.glow),
       expression: oneOf('expression', EXPRESSIONS.map((x) => x.id), DEFAULT.expression),
-      screen: oneOf<ScreenMode>('screen', ['eyes', 'glyph', 'wave', 'dots'], DEFAULT.screen),
+      screen: oneOf<ScreenMode>('screen', SCREENS.map((x) => x.id), DEFAULT.screen),
       optics: oneOf<OpticsMode>('optics', ['auto', 'mono', 'dual'], DEFAULT.optics),
       pupils: typeof r.pupils === 'boolean' ? r.pupils : DEFAULT.pupils,
       charge: clamp01(r.charge, DEFAULT.charge),

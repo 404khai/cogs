@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { CHASSIS, chassisById } from '../lib/chassis';
 import { EXPRESSIONS, expressionById } from '../lib/expressions';
-import { GLOWS, PAINTS, randomConfig, randomName, serial, encodeConfig, parseCog } from '../lib/config';
+import { GLOWS, PAINTS, SCREENS, randomConfig, randomName, serial, encodeConfig, parseCog } from '../lib/config';
 import type { CogConfig, ScreenMode, OpticsMode } from '../lib/config';
 import { Stage } from './Stage';
 import { JsonPanel } from './JsonPanel';
@@ -247,8 +247,8 @@ export function Studio({ config, setConfig }: { config: CogConfig; setConfig: (c
 
         <PanelHead index="07" title="DISPLAY" />
         <div className="row">
-          <Segmented<ScreenMode> label="Display mode" value={config.screen} onChange={(v) => update({ screen: v }, `display → ${v}`)}
-            options={[{ value: 'eyes', label: 'Eyes' }, { value: 'wave', label: 'Voice' }, { value: 'dots', label: 'Typing' }, { value: 'glyph', label: 'Glyph' }]} />
+          <Segmented<ScreenMode> label="Display mode" className="grid4" value={config.screen} onChange={(v) => update({ screen: v }, `display → ${v}`)}
+            options={SCREENS.map((x) => ({ value: x.id, label: x.label }))} />
         </div>
         <div className="row split">
           <Segmented<OpticsMode> label="Optics" value={config.optics} onChange={(v) => update({ optics: v }, `optics → ${v}`)}

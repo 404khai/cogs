@@ -26,6 +26,23 @@ type Entry = {
 const ENTRIES: Entry[] = [
   {
     date: '2026-11-18',
+    version: '0.5.0',
+    title: 'Agent displays, three new chassis and units that build themselves',
+    tag: 'Feature',
+    lede: 'The visor learns to show work in progress (thinking, searching, coding and working), and roster units now draft and assemble themselves as you scroll to them.',
+    items: [
+      { title: 'Thinking', body: 'A light chases round a ring of twelve LEDs while three satellites orbit a breathing core.' },
+      { title: 'Search', body: 'A radar sweep with a fading wake. Blips flare as the beam passes over them.' },
+      { title: 'Coding', body: 'Dot-matrix code scrolls up a terminal above a prompt with a blinking block cursor.' },
+      { title: 'Working', body: 'Three solid LED gears mesh and turn on the glass, phased tooth-to-gap and spun at speeds set by their tooth counts.' },
+      { title: 'Rampart, Lynx, Fold', body: 'Three more chassis, for 20 in all: a crenellated plate, a cat-eared unit with its status light below the visor, and a folded single-eye form.' },
+      { title: 'Self-assembling roster', body: 'Each roster card drafts its unit in blueprint lines, fills it with paint, pops in the fasteners, seats the visor and powers on the light and eyes. The glow behind each unit is gone, so they sit straight on the card.' },
+      { title: 'Animated exports', body: 'The new displays animate with SVG SMIL, so exported SVGs keep moving in browsers and READMEs.' },
+    ],
+    unit: { chassis: 'hex', color: '#9d8df0', screen: 'think' },
+  },
+  {
+    date: '2026-11-18',
     version: '0.4.0',
     title: 'Docs, a changelog and the assembly line',
     tag: 'Feature',

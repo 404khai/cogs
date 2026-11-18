@@ -185,10 +185,12 @@ export function Cog({ config, expression, track = true, svgRef, className }: Pro
         </filter>
       </defs>
 
+      {/* Layers carry cg-* classes so a parent can stage an assembly animation (see Roster). */}
       {/* contact shadow */}
-      <ellipse cx="200" cy={Math.min(ch.box[3] + 34, 382)} rx={(ch.box[2] - ch.box[0]) * 0.36} ry="9" fill={shade(c, -0.4)} opacity="0.22" filter={`url(#${id('soft')})`} />
+      <ellipse className="cg-shadow" cx="200" cy={Math.min(ch.box[3] + 34, 382)} rx={(ch.box[2] - ch.box[0]) * 0.36} ry="9" fill={shade(c, -0.4)} opacity="0.22" filter={`url(#${id('soft')})`} />
 
       {/* body */}
+      <g className="cg-body">
       <g filter={`url(#${id('shadow')})`}>
         <path d={ch.path} fill={`url(#${id('body')})`} />
       </g>
@@ -197,10 +199,11 @@ export function Cog({ config, expression, track = true, svgRef, className }: Pro
         <path d={ch.path} fill="none" stroke="#fff" strokeOpacity={lum > 0.75 ? 0.9 : 0.55} strokeWidth="6" transform="translate(0 3)" />
         <path d={ch.path} fill="none" stroke={shade(c, -0.3)} strokeOpacity="0.35" strokeWidth="6" transform="translate(0 -3)" />
       </g>
+      </g>
 
       {/* fasteners */}
       {ch.screws.map(([x, y], i) => (
-        <g key={i}>
+        <g key={i} className="cg-screw" style={{ ['--i' as string]: i }}>
           <circle cx={x} cy={y + 1} r="7.2" fill="#fff" opacity={lum > 0.75 ? 0.8 : 0.4} />
           <circle cx={x} cy={y} r="6.6" fill={shade(c, -0.52)} />
           <circle cx={x - 1.2} cy={y - 1.4} r="2.2" fill={shade(c, -0.3)} />
@@ -208,6 +211,7 @@ export function Cog({ config, expression, track = true, svgRef, className }: Pro
       ))}
 
       {/* recess: visor rim, merged with a notch for the status light when it sits right above */}
+      <g className="cg-visor">
       <g fill={shade(c, 0.2)} opacity={lum > 0.75 ? 1 : 0.7} transform="translate(0 1.4)">
         <rect x={v.x - pad} y={v.y - pad} width={v.w + pad * 2} height={v.h + pad * 2} rx={v.r + pad} />
         {tab && <rect x={tab.x} y={tab.y} width={tab.w} height={tab.h} rx={tab.r} />}
@@ -216,8 +220,10 @@ export function Cog({ config, expression, track = true, svgRef, className }: Pro
         <rect x={v.x - pad} y={v.y - pad} width={v.w + pad * 2} height={v.h + pad * 2} rx={v.r + pad} />
         {tab && <rect x={tab.x} y={tab.y} width={tab.w} height={tab.h} rx={tab.r} />}
       </g>
+      </g>
 
       {/* status light */}
+      <g className="cg-light">
       <g transform={li.angle ? `rotate(${li.angle} ${lcx} ${lcy})` : undefined}>
         {!tab && (
           <>
@@ -229,10 +235,13 @@ export function Cog({ config, expression, track = true, svgRef, className }: Pro
           {!reducedMotion && <animate attributeName="opacity" values="1;0.72;1" dur="3.2s" repeatCount="indefinite" />}
         </rect>
       </g>
+      </g>
 
+      <g className="cg-visor">
       <rect x={v.x - 2} y={v.y - 2} width={v.w + 4} height={v.h + 4} rx={v.r + 2} fill={shade(c, -0.45)} opacity="0.5" />
       <rect x={v.x} y={v.y} width={v.w} height={v.h} rx={v.r} fill={`url(#${id('screen')})`} />
-      <g clipPath={`url(#${id('sclip')})`}>
+      </g>
+      <g className="cg-eyes" clipPath={`url(#${id('sclip')})`}>
         <Eyes uid={uid} visor={v} optics={optics} L={frame.L} R={frame.R} gaze={frame.gaze} blink={frame.blink}
           glow={config.glow} charge={config.charge} pupils={config.pupils} mode={config.screen} />
         <rect x={v.x + v.r * 0.4} y={v.y + 3} width={v.w - v.r * 0.8} height={v.h * 0.16} rx={v.h * 0.08} fill={`url(#${id('gloss')})`} />

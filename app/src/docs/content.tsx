@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { CHASSIS } from '../lib/chassis';
 import { EXPRESSIONS } from '../lib/expressions';
-import { DEFAULT, GLOWS, PAINTS, toJSON, LOGO } from '../lib/config';
+import { DEFAULT, GLOWS, PAINTS, SCREENS, toJSON, LOGO } from '../lib/config';
 import type { CogConfig } from '../lib/config';
 import { GH } from '../lib/site';
 import { Cog } from '../components/Cog';
@@ -266,14 +266,14 @@ bun run dev  # http://localhost:5173`}</Code>
     id: 'display',
     title: 'Display & power',
     group: 'Concepts',
-    summary: 'Display modes, optics, pupils, emitter colour and the three power bars.',
+    summary: `${SCREENS.length} display modes, optics, pupils, emitter colour and the three power bars.`,
     unit: { chassis: 'dome', color: '#3657d8', screen: 'wave' },
     sections: [
       {
         title: 'Display modes',
         body: (
           <div className="doc-modes">
-            {([['eyes', 'Eyes', 'The expression, with gaze and blinks.'], ['wave', 'Voice', 'A waveform for agents that are speaking.'], ['dots', 'Typing', 'Three bouncing dots while it composes.'], ['glyph', 'Glyph', 'A pixel robot icon on the dot matrix.']] as const).map(([screen, name, note]) => (
+            {SCREENS.map(({ id: screen, label: name, note }) => (
               <figure key={screen}>
                 <Unit c={{ chassis: 'octa', color: '#d3d3cf', screen }} />
                 <figcaption><b className="display">{name}</b><span className="mono">screen: "{screen}"</span><i>{note}</i></figcaption>
@@ -337,7 +337,7 @@ bun run dev  # http://localhost:5173`}</Code>
               <tr><td><code>name</code></td><td>string</td><td>Up to 16 characters</td></tr>
               <tr><td><code>chassis</code></td><td>enum</td><td>{CHASSIS.map((c) => c.id).join(' · ')}</td></tr>
               <tr><td><code>expression</code></td><td>enum</td><td>{EXPRESSIONS.map((x) => x.id).join(' · ')}</td></tr>
-              <tr><td><code>screen</code></td><td>enum</td><td>eyes · wave · dots · glyph</td></tr>
+              <tr><td><code>screen</code></td><td>enum</td><td>{SCREENS.map((x) => x.id).join(' · ')}</td></tr>
               <tr><td><code>optics</code></td><td>enum</td><td>auto · mono · dual</td></tr>
               <tr><td><code>color</code>, <code>glow</code></td><td>string</td><td><code>#rrggbb</code></td></tr>
               <tr><td><code>pupils</code></td><td>boolean</td><td>true · false</td></tr>
