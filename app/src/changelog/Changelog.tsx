@@ -8,7 +8,7 @@ import { DEFAULT, LOGO } from '../lib/config';
 import type { CogConfig } from '../lib/config';
 import { GH } from '../lib/site';
 
-type Tag = 'Feature' | 'Chassis' | 'Brand' | 'Platform' | 'Foundation';
+type Tag = 'Feature' | 'Fix' | 'Chassis' | 'Brand' | 'Platform' | 'Foundation';
 
 type Entry = {
   date: string; // ISO
@@ -24,6 +24,17 @@ type Entry = {
 
 // Newest first.
 const ENTRIES: Entry[] = [
+  {
+    date: '2026-11-18',
+    version: '0.5.1',
+    title: 'No more boxes behind roster units',
+    tag: 'Fix',
+    lede: 'Roster units sit cleanly on their cards once they finish assembling.',
+    items: [
+      { title: 'Soft shadows again', body: 'The paint-fill animation held its clip-path after finishing, which cut each unit’s drop shadow into a hard rectangle. The assembly animations now let go of every clip and filter when they end.' },
+    ],
+    unit: { chassis: 'octa', color: '#7cc9ea', expression: 'happy' },
+  },
   {
     date: '2026-11-18',
     version: '0.5.0',
