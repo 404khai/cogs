@@ -18,7 +18,7 @@
 - **Export and share.** SVG and PNG at 1024px, plus a share link that stores the cog in the URL hash.
 - **JSON in and out.** Copy, download, edit, paste or upload JSON to rebuild a cog. Pasting cog JSON anywhere on the page builds it.
 - **Docs and changelog.** `/docs` is the manual, with ⌘K search and live chassis and expression galleries. `/changelog` lists every release.
-- **Components.** `/components` is a parts bin of machined UI for agents: Aperture (a camera-iris voice indicator that opens with your mic level), a gear loader, status lamps, a detented rotary knob, a toggle lever, an odometer and a sprung pressure gauge.
+- **Components.** `/components` has drop-in pieces for apps with a cog in them: CogComposer (a machined chat console with the bot perched in a cradle and a voice-reactive LED channel), CogRing (a machined voice ring), CogAvatar with presence, CogTyping, CogBelt (Sprocket units chained by coloured timing belts), a gear loader and a task card.
 - **Self-assembling roster.** Roster units draft themselves in blueprint lines, then get paint, fasteners, a visor and power as they scroll into view.
 - **The assembly line.** In the footer, a meshing gear train drives a conveyor, and units ride through a QA scanner while Flange supervises.
 
@@ -79,7 +79,7 @@ app/src/
   components/Gearworks.tsx  the footer assembly line (meshing gear train + conveyor)
   components/SiteChrome.tsx shared nav and footer
   docs/                     /docs: shell, search, ruler rail and page content
-  kit/                      /components: Parts.tsx (the parts) and the parts-bin page
+  kit/                      /components: CogKit.tsx (the components), the page, and archive/ for retired parts
   changelog/Changelog.tsx   /changelog: add new releases at the top of ENTRIES
   lib/config.ts             config model, presets, names, JSON validation
   lib/router.ts             tiny History API router: /, /docs, /docs/:page, /components, /changelog
