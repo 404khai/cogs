@@ -1,7 +1,11 @@
+/**
+ * Archived parts from the first parts bin (v0.6.0 preview): Aperture, Lamp, Knob, Lever, Odometer, Gauge.
+ * Not shown on /components; kept for reference and reuse. GearLoader lives on in ../CogKit.tsx.
+ */
 import { useEffect, useId, useRef, useState } from 'react';
-import { gearPoints, roundedPoly } from '../lib/chassis';
-import { meshChain } from '../lib/gears';
-import { reducedMotion } from '../lib/pointer';
+import { gearPoints, roundedPoly } from '../../lib/chassis';
+import { meshChain } from '../../lib/gears';
+import { reducedMotion } from '../../lib/pointer';
 
 const uidOf = (s: string) => 'k' + s.replace(/[^a-zA-Z0-9]/g, '');
 const TAU = Math.PI * 2;
