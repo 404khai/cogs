@@ -18,6 +18,7 @@
 - **Export and share.** SVG and PNG at 1024px, plus a share link that stores the cog in the URL hash.
 - **JSON in and out.** Copy, download, edit, paste or upload JSON to rebuild a cog. Pasting cog JSON anywhere on the page builds it.
 - **Docs and changelog.** `/docs` is the manual, with ⌘K search and live chassis and expression galleries. `/changelog` lists every release.
+- **Components.** `/components` is a parts bin of machined UI for agents: Aperture (a camera-iris voice indicator that opens with your mic level), a gear loader, status lamps, a detented rotary knob, a toggle lever, an odometer and a sprung pressure gauge.
 - **Self-assembling roster.** Roster units draft themselves in blueprint lines, then get paint, fasteners, a visor and power as they scroll into view.
 - **The assembly line.** In the footer, a meshing gear train drives a conveyor, and units ride through a QA scanner while Flange supervises.
 
@@ -78,9 +79,10 @@ app/src/
   components/Gearworks.tsx  the footer assembly line (meshing gear train + conveyor)
   components/SiteChrome.tsx shared nav and footer
   docs/                     /docs: shell, search, ruler rail and page content
+  kit/                      /components: Parts.tsx (the parts) and the parts-bin page
   changelog/Changelog.tsx   /changelog: add new releases at the top of ENTRIES
   lib/config.ts             config model, presets, names, JSON validation
-  lib/router.ts             tiny History API router: /, /docs, /docs/:page, /changelog
+  lib/router.ts             tiny History API router: /, /docs, /docs/:page, /components, /changelog
 ```
 
 The app uses clean routes with no `.html`. The dev server falls back to `index.html`, and `app/vercel.json` does the same on Vercel. On any other host, add an SPA fallback to `index.html`.

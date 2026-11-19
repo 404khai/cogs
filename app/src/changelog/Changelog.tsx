@@ -25,6 +25,23 @@ type Entry = {
 // Newest first.
 const ENTRIES: Entry[] = [
   {
+    date: '2026-11-19',
+    version: '0.6.0',
+    title: 'The parts bin',
+    tag: 'Feature',
+    lede: 'A components page of machined interface parts for agents, led by an iris that listens.',
+    items: [
+      { title: 'Aperture', body: 'A voice indicator built like a camera iris: seven steel blades open with the input level over a glowing lens, inside a 60-segment VU ring. Idle, listening, speaking and muted states, driven by a simulated signal or your real microphone.' },
+      { title: 'Gear loader', body: 'Three meshed gears turning at speeds set by their tooth counts, with an adjustable speed.' },
+      { title: 'Status lamp', body: 'A caged indicator lamp: OK glows, Warn breathes, Fault strobes, Off goes cold.' },
+      { title: 'Rotary knob', body: 'A knurled knob with 11 detents that snaps to each step with a little overshoot. Drag it, or use the arrow keys.' },
+      { title: 'Toggle lever', body: 'A spring-thrown lever on a screwed plate, with a pilot LED.' },
+      { title: 'Odometer and gauge', body: 'Rolling number drums that turn one after another, and a pressure gauge whose sprung needle overshoots, settles and can be pushed into the red.' },
+      { title: 'Components in the nav', body: 'Components sits in the navbar, the footer and the docs sidebar, at /components.' },
+    ],
+    unit: { chassis: 'orb', color: '#d3d3cf', screen: 'wave' },
+  },
+  {
     date: '2026-11-18',
     version: '0.5.0',
     title: 'Agent displays, three new chassis and units that build themselves',

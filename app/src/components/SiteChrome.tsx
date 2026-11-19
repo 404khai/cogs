@@ -4,7 +4,7 @@ import { Cog } from './Cog';
 import { EnergyBar } from './ui';
 import { Gearworks } from './Gearworks';
 
-type Page = 'studio' | 'docs' | 'changelog';
+type Page = 'studio' | 'docs' | 'changelog' | 'components';
 
 export function Logo({ className = 'logo-mark' }: { className?: string }) {
   return (
@@ -31,6 +31,7 @@ export function Nav({ current, power }: { current: Page; power?: number }) {
     ['Studio', `${home}#studio`, 'studio'],
     ['Roster', `${home}#roster`, null],
     ['Docs', '/docs', 'docs'],
+    ['Components', '/components', 'components'],
     ['Changelog', '/changelog', 'changelog'],
   ];
   return (
@@ -67,7 +68,7 @@ export function Nav({ current, power }: { current: Page; power?: number }) {
 
 const COLUMNS: { title: string; links: [string, string][] }[] = [
   { title: 'Product', links: [['Studio', '/#studio'], ['Roster', '/#roster'], ['Cog JSON', '/docs/json'], ['Chassis', '/docs/chassis']] },
-  { title: 'Resources', links: [['Docs', '/docs'], ['Changelog', '/changelog'], ['Expressions', '/docs/expressions'], ['Extending', '/docs/extending']] },
+  { title: 'Resources', links: [['Docs', '/docs'], ['Components', '/components'], ['Changelog', '/changelog'], ['Expressions', '/docs/expressions'], ['Extending', '/docs/extending']] },
   { title: 'Community', links: [['GitHub', GH], ['Issues', `${GH}/issues`], ['Releases', `${GH}/releases`], ['404khai', PORTFOLIO]] },
 ];
 

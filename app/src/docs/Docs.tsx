@@ -253,6 +253,7 @@ export default function Docs({ path }: { path: string }) {
             <BounceList items={ROUTES.map((r) => r.title)} value={index} onChange={(i) => go(ROUTES[i].id)} />
             <nav className="docs-out mono">
               <a href="/">Studio</a>
+              <a href="/components">Components</a>
               <a href="/changelog">Changelog</a>
               <a href={GH}>GitHub ↗</a>
               <a href={PORTFOLIO}>Built by 404khai ↗</a>
