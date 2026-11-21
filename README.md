@@ -85,7 +85,7 @@ app/src/
   lib/router.ts             tiny History API router: /, /docs, /docs/:page, /components, /changelog
 ```
 
-The app uses clean routes with no `.html`. The dev server falls back to `index.html`, and `app/vercel.json` does the same on Vercel. On any other host, add an SPA fallback to `index.html`.
+The app uses clean routes with no `.html`. The dev server falls back to `index.html`, and `vercel.json` does the same on Vercel. The root `vercel.json` builds `app/`, so the project deploys whether its Root Directory is the repo root or `app`. On any other host, add an SPA fallback to `index.html`.
 
 ## Credits
 
