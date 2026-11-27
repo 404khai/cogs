@@ -1,4 +1,4 @@
-# cogs for Flutter
+# Cogs, The avatars for machines
 
 ![cogs: machined avatar units](https://raw.githubusercontent.com/404khai/cogs/main/packages/flutter/doc/cogs.png)
 
@@ -66,14 +66,14 @@ switch (parseCog(text)) {
 
 `CogConfig.toJson()` writes the studio's export format. `CogConfig.fromJson` throws a `FormatException` on unreadable input. `encodeConfig` / `decodeConfig` read and write the studio's share-link payload (the part after `#`), and `serial` gives a unit's serial number.
 
-| Field | Values |
-| --- | --- |
-| `chassis` | `octa` `capsule` `tab` `hex` `drop` `chamfer` `bloom` `plate` `gear` `orb` `keystone` `dome` `clamp` `bracket` `crest` `cross` `ticket` `rampart` `lynx` `fold` |
-| `expression` | `idle` `happy` `sleepy` `angry` `sad` `surprised` `suspicious` `wink` `focused` `skeptic` `bored` `lookup` |
-| `screen` | `eyes` `wave` `dots` `glyph` `think` `search` `code` `work` |
-| `optics` | `auto` `mono` `dual` |
-| `color`, `glow` | `#rrggbb` |
-| `charge`, `curiosity`, `blink` | `0` – `1` |
+| Field                          | Values                                                                                                                                                          |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `chassis`                      | `octa` `capsule` `tab` `hex` `drop` `chamfer` `bloom` `plate` `gear` `orb` `keystone` `dome` `clamp` `bracket` `crest` `cross` `ticket` `rampart` `lynx` `fold` |
+| `expression`                   | `idle` `happy` `sleepy` `angry` `sad` `surprised` `suspicious` `wink` `focused` `skeptic` `bored` `lookup`                                                      |
+| `screen`                       | `eyes` `wave` `dots` `glyph` `think` `search` `code` `work`                                                                                                     |
+| `optics`                       | `auto` `mono` `dual`                                                                                                                                            |
+| `color`, `glow`                | `#rrggbb`                                                                                                                                                       |
+| `charge`, `curiosity`, `blink` | `0` – `1`                                                                                                                                                       |
 
 The parts lists are `chassisList`, `expressions`, `ScreenMode.values`, `paints` and `glows`. `roster` has the studio's eight units, and `randomConfig()` rolls a new one.
 
