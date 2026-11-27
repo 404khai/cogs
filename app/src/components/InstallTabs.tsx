@@ -5,8 +5,8 @@ import './install.css';
 export type Platform = 'react' | 'react-native' | 'flutter';
 /** `pkg` is everything the command installs: the package plus any peers the app won't already have. */
 const PACKAGES: { id: Platform; label: string; pkg: string }[] = [
-  { id: 'react', label: 'React', pkg: '@cogs/react' },
-  { id: 'react-native', label: 'React Native', pkg: '@cogs/react-native react-native-svg' },
+  { id: 'react', label: 'React', pkg: '@404khai/cogs' },
+  { id: 'react-native', label: 'React Native', pkg: '@404khai/cogs-react-native react-native-svg' },
   { id: 'flutter', label: 'Flutter', pkg: 'cogs' },
 ];
 

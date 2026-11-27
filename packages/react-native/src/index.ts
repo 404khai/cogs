@@ -1,5 +1,5 @@
 /*
- * @cogs/react-native: cogs on iOS and Android, drawn with react-native-svg.
+ * @404khai/cogs-react-native: cogs on iOS and Android, drawn with react-native-svg.
  * Geometry, expressions, colour, JSON and face logic are the studio's own (app/src/lib), so a cog
  * built in the studio looks and behaves the same in an app.
  */

@@ -1,5 +1,5 @@
 {
-  "name": "@cogs/react-native",
+  "name": "@404khai/cogs-react-native",
   "version": "0.1.0",
   "description": "Cogs for React Native: parametric robot avatars with 20 chassis, 12 expressions and 8 display modes, drawn with react-native-svg and built from cog JSON.",
   "license": "MIT",

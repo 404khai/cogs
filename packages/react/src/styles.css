@@ -1,5 +1,5 @@
 /*
- * @cogs/react styles: import once, e.g. `import '@cogs/react/styles.css'`.
+ * @404khai/cogs styles: import once, e.g. `import '@404khai/cogs/styles.css'`.
  * The voice and typing displays animate with CSS; CogAvatar and CogTyping are styled here.
  * Rules are lifted from the studio (app/src/index.css, app/src/kit/kit.css). Theme them with the custom properties below.
  */

@@ -1,4 +1,4 @@
-# @cogs/react
+# @404khai/cogs
 
 Cogs for React: parametric SVG avatars for machines. 20 chassis, 12 expressions and 8 display modes, with eyes that follow the cursor, glance around and blink. Build a unit in the [studio](https://github.com/404khai/cogs), copy its JSON and drop it in.
 
@@ -7,14 +7,14 @@ The package uses the studio's own renderer (`app/src`), so a unit looks and move
 ## Install
 
 ```sh
-npm i @cogs/react
-# or: bun add @cogs/react · pnpm add @cogs/react · yarn add @cogs/react
+npm i @404khai/cogs
+# or: bun add @404khai/cogs · pnpm add @404khai/cogs · yarn add @404khai/cogs
 ```
 
 React 18 or later is a peer dependency. Import the stylesheet once, for example in your root layout:
 
 ```ts
-import '@cogs/react/styles.css';
+import '@404khai/cogs/styles.css';
 ```
 
 It animates the Voice and Typing displays and styles `CogAvatar` and `CogTyping`. Everything else is plain SVG and works without it.
@@ -22,7 +22,7 @@ It animates the Voice and Typing displays and styles `CogAvatar` and `CogTyping`
 ## Usage
 
 ```tsx
-import { Cog } from '@cogs/react';
+import { Cog } from '@404khai/cogs';
 
 // Props for each field
 <Cog chassis="gear" color="#e8603f" glow="#ffb23f" expression="angry" pupils={false} size={96} />
@@ -71,7 +71,7 @@ As in the studio, missing or invalid fields fall back to the defaults, and broke
 ### CogAvatar and CogTyping
 
 ```tsx
-import { CogAvatar, CogTyping } from '@cogs/react';
+import { CogAvatar, CogTyping } from '@404khai/cogs';
 
 <CogAvatar unit={json} size={56} presence="online" />      // online · busy · away · offline
 <CogAvatar unit={json} screen="think" />                   // show what the agent is doing
@@ -86,7 +86,7 @@ The bundle is marked `'use client'`, so it works in Next.js server components. O
 
 ```tsx
 import { renderToStaticMarkup } from 'react-dom/server';
-import { Cog, LOGO } from '@cogs/react';
+import { Cog, LOGO } from '@404khai/cogs';
 
 const svg = renderToStaticMarkup(<Cog unit={LOGO} size={400} track={false} />);
 ```
@@ -101,7 +101,7 @@ The studio's data and JSON tools are exported too:
 - Types: `CogConfig`, `CogInput`, `CogProps`, `ChassisId`, `ExpressionId`, `ScreenMode`, `OpticsMode`, `Presence`, `Chassis`, `Expression`
 
 ```ts
-import { CHASSIS, parseCog } from '@cogs/react';
+import { CHASSIS, parseCog } from '@404khai/cogs';
 
 const res = parseCog(text);
 if ('error' in res) throw new Error(res.error);
