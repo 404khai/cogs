@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import './kit.css';
 import { Blueprint } from '../components/Blueprint';
 import { Footer, Nav } from '../components/SiteChrome';
+import { Install } from '../components/InstallTabs';
 import { Corners, EnergyBar, Segmented } from '../components/ui';
 import { ROSTER } from '../lib/config';
 import type { CogConfig, ScreenMode } from '../lib/config';
@@ -181,6 +182,7 @@ export default function Components() {
           <p>
             Components built around the units: a voice ring, a chat composer with the bot perched on top, avatars, typing indicators and loaders. Pass any cog from the studio as <code>unit</code>, and its screen follows what it's doing.
           </p>
+          <Install className="kit-install" />
         </header>
 
         <section className="feature">

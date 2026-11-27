@@ -1,0 +1,26 @@
+/* Install commands: package manager tabs over a dark terminal strip. */
+.install { margin: 6px 0 18px; border: 1px solid var(--ink); background: var(--ink); min-width: 0; }
+.install figcaption { display: flex; justify-content: space-between; align-items: stretch; border-bottom: 1px solid #1f2731; }
+.install-tabs { display: flex; }
+.install-tab {
+  padding: 7px 12px; border: 0; border-right: 1px solid #1f2731; background: none; color: #5b6b80;
+  font: inherit; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
+}
+.install-tab:hover { color: #8fa3ba; }
+.install-tab.active { color: #cfe9ff; box-shadow: inset 0 -2px 0 var(--volt); }
+.install-tab:focus-visible, .install-copy:focus-visible { outline: 1px solid var(--cyan); outline-offset: -1px; }
+.install-copy { padding: 7px 12px; border: 0; background: none; color: #8fa3ba; font-size: 10px; cursor: pointer; }
+.install-copy:hover { color: var(--cyan); }
+.install pre { margin: 0; padding: 14px 16px; overflow-x: auto; font-family: var(--mono); font-size: 12.5px; line-height: 1.65; color: #cfe9ff; }
+.install pre code { padding: 0; background: none; border: 0; border-radius: 0; color: inherit; font-size: inherit; }
+.install .tok-prompt { color: var(--volt); user-select: none; }
+
+.install-picker { display: flex; flex-direction: column; gap: 10px; }
+.install-picker .install { margin: 0; }
+.install-platforms { display: flex; flex-wrap: wrap; gap: 6px; }
+.install-platforms button {
+  padding: 6px 10px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper-2); color: var(--ink-2);
+  font-size: 11px; cursor: pointer;
+}
+.install-platforms button:hover { border-color: var(--blue-line); color: var(--ink); }
+.install-platforms button.active { border-color: var(--blue); background: var(--blue-faint); color: var(--blue); }
