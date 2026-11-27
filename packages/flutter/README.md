@@ -1,5 +1,7 @@
 # cogs for Flutter
 
+![cogs: machined avatar units](https://raw.githubusercontent.com/404khai/cogs/main/packages/flutter/doc/cogs.png)
+
 Cogs avatars, painted with `CustomPainter`. It's the same machined units as the [cogs studio](https://github.com/404khai/cogs): 20 chassis, 12 expressions and 8 display modes, built from cog JSON.
 
 ```sh
