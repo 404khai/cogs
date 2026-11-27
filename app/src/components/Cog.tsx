@@ -1,14 +1,13 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import type { Ref } from 'react';
 import { chassisById } from '../lib/chassis';
-import { expressionById, EYE_KEYS } from '../lib/expressions';
-import type { EyeP } from '../lib/expressions';
+import { expressionById } from '../lib/expressions';
 import type { CogConfig } from '../lib/config';
+import { createFace, faceFrame, lightNotch, RECESS_PAD, stepFace } from '../lib/face';
+import type { FaceFrame, Gaze } from '../lib/face';
 import { shade, luminance } from '../lib/color';
 import { pointer, reducedMotion } from '../lib/pointer';
 import { Eyes } from './Eyes';
-
-type Frame = { L: EyeP; R: EyeP; gaze: { x: number; y: number }; blink: number };
 
 type Props = {
   config: CogConfig;
@@ -20,82 +19,40 @@ type Props = {
   className?: string;
 };
 
-const rand = (a: number, b: number) => a + Math.random() * (b - a);
-
 export function Cog({ config, expression, track = true, svgRef, className }: Props) {
   const uid = 'c' + useId().replace(/[^a-zA-Z0-9]/g, '');
   const ch = chassisById(config.chassis);
   const expr = expressionById(expression ?? config.expression);
   const optics = config.optics === 'auto' ? ch.optics : config.optics;
 
-  const [frame, setFrame] = useState<Frame>(() => ({ L: { ...expr.L }, R: { ...expr.R }, gaze: { x: 0, y: 0 }, blink: 0 }));
+  const [frame, setFrame] = useState<FaceFrame>(() => ({ L: { ...expr.L }, R: { ...expr.R }, gaze: { x: 0, y: 0 }, blink: 0 }));
   const live = useRef({ expr, config, track });
   live.current = { expr, config, track };
   const elRef = useRef<SVGSVGElement | null>(null);
 
   useEffect(() => {
-    const s = {
-      L: { ...live.current.expr.L },
-      R: { ...live.current.expr.R },
-      gaze: { x: 0, y: 0 },
-      gazeT: { x: 0, y: 0 },
-      blink: 0,
-      blinkStart: -1,
-      nextBlink: performance.now() + rand(800, 3000),
-      nextSacc: 0,
-      visible: true,
-    };
-    const io = new IntersectionObserver(([en]) => (s.visible = en.isIntersecting));
+    const s = createFace(live.current.expr, performance.now());
+    let visible = true;
+    const io = new IntersectionObserver(([en]) => (visible = en.isIntersecting));
     if (elRef.current) io.observe(elRef.current);
 
     let raf = 0;
     const loop = (t: number) => {
       raf = requestAnimationFrame(loop);
-      if (!s.visible) return;
+      if (!visible) return;
       const { expr: ex, config: cf, track: tr } = live.current;
-      let moved = 0;
 
-      // Tween eye parameters toward the target expression.
-      for (const side of ['L', 'R'] as const) {
-        for (const k of EYE_KEYS) {
-          const d = ex[side][k] - s[side][k];
-          s[side][k] += d * (reducedMotion ? 1 : 0.2);
-          moved = Math.max(moved, Math.abs(d));
-        }
-      }
-
-      // Gaze: follow pointer while it is moving, otherwise wander.
-      const fresh = t - pointer.t < 2500 && pointer.t > 0;
-      if (tr && fresh && elRef.current) {
+      // Gaze: follow the pointer while it is moving, otherwise let the face wander.
+      let look: Gaze | null = null;
+      if (tr && t - pointer.t < 2500 && pointer.t > 0 && elRef.current) {
         const r = elRef.current.getBoundingClientRect();
         const dx = (pointer.x - (r.left + r.width / 2)) / Math.max(260, r.width * 0.9);
         const dy = (pointer.y - (r.top + r.height / 2)) / Math.max(260, r.height * 0.9);
         const m = Math.hypot(dx, dy);
         const k = m > 1 ? 1 / m : 1;
-        s.gazeT = { x: dx * k * cf.curiosity, y: dy * k * cf.curiosity };
-      } else if (t > s.nextSacc && !reducedMotion) {
-        const a = rand(0, Math.PI * 2);
-        const m = rand(0, 0.7) * cf.curiosity;
-        s.gazeT = Math.random() < 0.35 ? { x: 0, y: 0 } : { x: Math.cos(a) * m, y: Math.sin(a) * m * 0.7 };
-        s.nextSacc = t + rand(900, 3200);
+        look = { x: dx * k * cf.curiosity, y: dy * k * cf.curiosity };
       }
-      const gx = s.gaze.x + (s.gazeT.x - s.gaze.x) * 0.16;
-      const gy = s.gaze.y + (s.gazeT.y - s.gaze.y) * 0.16;
-      moved = Math.max(moved, Math.abs(gx - s.gaze.x), Math.abs(gy - s.gaze.y));
-      s.gaze = { x: gx, y: gy };
-
-      // Blink.
-      if (cf.blink > 0.02 && t > s.nextBlink && !reducedMotion) {
-        s.blinkStart = t;
-        const double = Math.random() < 0.18;
-        s.nextBlink = t + (double ? 260 : rand(1400, 5200) / (0.3 + cf.blink * 1.6));
-      }
-      const bt = t - s.blinkStart;
-      const b = s.blinkStart >= 0 && bt < 180 ? Math.sin((Math.PI * bt) / 180) : 0;
-      if (b !== s.blink) moved = Math.max(moved, 0.01);
-      s.blink = b;
-
-      if (moved > 0.0008) setFrame({ L: { ...s.L }, R: { ...s.R }, gaze: { ...s.gaze }, blink: s.blink });
+      if (stepFace(s, t, { expr: ex, curiosity: cf.curiosity, blink: cf.blink, look, still: reducedMotion })) setFrame(faceFrame(s));
     };
     raf = requestAnimationFrame(loop);
     return () => {
@@ -111,14 +68,8 @@ export function Cog({ config, expression, track = true, svgRef, className }: Pro
   const lcx = li.x + li.w / 2;
   const lcy = li.y + li.h / 2;
   const id = (s: string) => `${uid}-${s}`;
-  const pad = 11;
-  // Light sits directly above the visor → cut it into a notch of the visor recess (as on the reference bots).
-  const lpad = 7;
-  const tab =
-    !li.angle && li.w > li.h && li.x >= v.x && li.x + li.w <= v.x + v.w && v.y - pad - (li.y + li.h) < 30
-      ? { x: li.x - lpad, y: li.y - lpad, w: li.w + lpad * 2, h: v.y - (li.y - lpad), r: li.h / 2 + lpad }
-      : null;
-  const recessTop = tab ? tab.y : v.y - pad;
+  const pad = RECESS_PAD;
+  const { tab, recessTop } = lightNotch(ch);
 
   return (
     <svg

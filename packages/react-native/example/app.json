@@ -1,0 +1,9 @@
+{
+  "expo": {
+    "name": "Cogs",
+    "slug": "cogs-example",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#eef0ea"
+  }
+}
