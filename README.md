@@ -19,7 +19,7 @@
 - **JSON in and out.** Copy, download, edit, paste or upload JSON to rebuild a cog. Pasting cog JSON anywhere on the page builds it.
 - **Docs and changelog.** `/docs` is the manual, with ⌘K search and live chassis and expression galleries. `/changelog` lists every release.
 - **Components.** `/components` has drop-in pieces for apps with a cog in them: CogComposer (a machined chat console with the bot perched in a cradle and a voice-reactive LED channel), CogRing (a machined voice ring), CogAvatar with presence, CogTyping, CogBelt (Sprocket units chained by coloured timing belts), a gear loader and a task card.
-- **Packages.** `@cogs/react`, `@cogs/react-native` and `cogs` for Flutter render the same units from cog JSON in your own app. See [Install](#install).
+- **Packages.** `@404khai/cogs`, `@404khai/cogs-react-native` and `cogs` for Flutter render the same units from cog JSON in your own app. See [Install](#install).
 - **Self-assembling roster.** Roster units draft themselves in blueprint lines, then get paint, fasteners, a visor and power as they scroll into view.
 - **The assembly line.** In the footer, a meshing gear train drives a conveyor, and units ride through a QA scanner while Flange supervises.
 
@@ -30,14 +30,14 @@ Put cogs in your own app. Every package takes the same [Cog JSON](#cog-json), so
 **React**
 
 ```sh
-bun add @cogs/react
-npm install @cogs/react
-pnpm add @cogs/react
+bun add @404khai/cogs
+npm install @404khai/cogs
+pnpm add @404khai/cogs
 ```
 
 ```tsx
-import { Cog } from '@cogs/react';
-import '@cogs/react/styles.css';
+import { Cog } from '@404khai/cogs';
+import '@404khai/cogs/styles.css';
 
 <Cog unit={flange} size={96} />
 ```
@@ -45,12 +45,12 @@ import '@cogs/react/styles.css';
 **React Native**
 
 ```sh
-bun add @cogs/react-native react-native-svg
-npm install @cogs/react-native react-native-svg
-pnpm add @cogs/react-native react-native-svg
+bun add @404khai/cogs-react-native react-native-svg
+npm install @404khai/cogs-react-native react-native-svg
+pnpm add @404khai/cogs-react-native react-native-svg
 ```
 
-`react-native-svg` is a peer dependency. On a bare app, run `pod install` in `ios/` afterwards; on Expo, use `npx expo install @cogs/react-native react-native-svg`.
+`react-native-svg` is a peer dependency. On a bare app, run `pod install` in `ios/` afterwards; on Expo, use `npx expo install @404khai/cogs-react-native react-native-svg`.
 
 **Flutter**
 

@@ -138,12 +138,12 @@ bun run dev  # http://localhost:5173`}</Code>
         body: (
           <>
             <p>
-              <code>@cogs/react</code> renders units and the parts from <a href="/components">/components</a> in any React app. Pick your package manager; the choice carries across the page.
+              <code>@404khai/cogs</code> renders units and the parts from <a href="/components">/components</a> in any React app. Pick your package manager; the choice carries across the page.
             </p>
             <InstallTabs platform="react" />
             <p>It needs React 18 or later. Import the stylesheet once, then render a unit from its JSON:</p>
-            <Code lang="tsx" title="App.tsx">{`import { Cog } from '@cogs/react';
-import '@cogs/react/styles.css';
+            <Code lang="tsx" title="App.tsx">{`import { Cog } from '@404khai/cogs';
+import '@404khai/cogs/styles.css';
 import flange from './flange.json';  // copied from panel 09
 
 export const Avatar = () => <Cog unit={flange} size={96} />;`}</Code>
@@ -155,13 +155,13 @@ export const Avatar = () => <Cog unit={flange} size={96} />;`}</Code>
         body: (
           <>
             <p>
-              <code>@cogs/react-native</code> brings the same units to iOS and Android. It draws with <code>react-native-svg</code>, so the command installs that too.
+              <code>@404khai/cogs-react-native</code> brings the same units to iOS and Android. It draws with <code>react-native-svg</code>, so the command installs that too.
             </p>
             <InstallTabs platform="react-native" />
             <p>
-              On a bare React Native app, run <code>pod install</code> in <code>ios/</code> afterwards. On Expo, use <code>npx expo install @cogs/react-native react-native-svg</code> so the versions match your SDK. The component mirrors the React one, with a <code>gaze</code> prop in place of pointer tracking:
+              On a bare React Native app, run <code>pod install</code> in <code>ios/</code> afterwards. On Expo, use <code>npx expo install @404khai/cogs-react-native react-native-svg</code> so the versions match your SDK. The component mirrors the React one, with a <code>gaze</code> prop in place of pointer tracking:
             </p>
-            <Code lang="tsx" title="Avatar.tsx">{`import { Cog } from '@cogs/react-native';
+            <Code lang="tsx" title="Avatar.tsx">{`import { Cog } from '@404khai/cogs-react-native';
 
 export const Avatar = () => <Cog unit={flange} size={96} gaze={{ x: 0.3, y: 0 }} />;`}</Code>
           </>

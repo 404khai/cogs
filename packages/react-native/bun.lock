@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "@cogs/react-native",
+      "name": "@404khai/cogs-react-native",
       "devDependencies": {
         "@types/react": "^19.3.0",
         "react": "^19.3.1",

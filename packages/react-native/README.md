@@ -1,4 +1,4 @@
-# @cogs/react-native
+# @404khai/cogs-react-native
 
 Cogs for iOS and Android: parametric robot avatars with 20 chassis, 12 expressions and 8 display modes, drawn with [react-native-svg](https://github.com/software-mansion/react-native-svg). A cog exported from the [studio](https://github.com/404khai/cogs) as JSON renders the same here.
 
@@ -6,10 +6,10 @@ Cogs for iOS and Android: parametric robot avatars with 20 chassis, 12 expressio
 
 ```sh
 # Expo
-npx expo install @cogs/react-native react-native-svg
+npx expo install @404khai/cogs-react-native react-native-svg
 
 # Bare React Native
-npm install @cogs/react-native react-native-svg
+npm install @404khai/cogs-react-native react-native-svg
 cd ios && pod install
 ```
 
@@ -18,7 +18,7 @@ cd ios && pod install
 ## Use
 
 ```tsx
-import { Cog } from '@cogs/react-native';
+import { Cog } from '@404khai/cogs-react-native';
 
 <Cog size={96} />                                          // Rivet, the default unit
 <Cog chassis="hex" expression="happy" color="#9d8df0" />   // fields as props

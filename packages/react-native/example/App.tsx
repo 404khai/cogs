@@ -3,8 +3,8 @@ import type { ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import type { GestureResponderEvent, LayoutRectangle } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { CHASSIS, Cog, DEFAULT, EXPRESSIONS, PAINTS, ROSTER, SCREENS, resolveCog, toJSON } from '@cogs/react-native';
-import type { CogConfig, Gaze } from '@cogs/react-native';
+import { CHASSIS, Cog, DEFAULT, EXPRESSIONS, PAINTS, ROSTER, SCREENS, resolveCog, toJSON } from '@404khai/cogs-react-native';
+import type { CogConfig, Gaze } from '@404khai/cogs-react-native';
 
 const INK = '#1d2326';
 const MUTED = '#6b7378';
@@ -60,7 +60,7 @@ export default function App() {
       <SafeAreaView style={s.root}>
         <ScrollView contentContainerStyle={s.page} keyboardShouldPersistTaps="handled">
           <Text style={s.title}>cogs</Text>
-          <Text style={s.sub}>@cogs/react-native · drag on the stage to steer the eyes</Text>
+          <Text style={s.sub}>@404khai/cogs-react-native · drag on the stage to steer the eyes</Text>
 
           <View
             style={s.stage}

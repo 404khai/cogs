@@ -90,7 +90,7 @@ export type CogAvatarProps = {
   onWarnings?: (warnings: string[]) => void;
 };
 
-/** The unit in a socket, with an optional presence lamp. Needs `@cogs/react/styles.css`. */
+/** The unit in a socket, with an optional presence lamp. Needs `@404khai/cogs/styles.css`. */
 export function CogAvatar({ unit, onWarnings, ...rest }: CogAvatarProps) {
   return <KitAvatar unit={useResolved(unit, {}, onWarnings)} {...rest} />;
 }
@@ -103,7 +103,7 @@ export type CogTypingProps = {
   onWarnings?: (warnings: string[]) => void;
 };
 
-/** An inline "unit is working" status line. Needs `@cogs/react/styles.css`. */
+/** An inline "unit is working" status line. Needs `@404khai/cogs/styles.css`. */
 export function CogTyping({ unit, onWarnings, ...rest }: CogTypingProps) {
   return <KitTyping unit={useResolved(unit, {}, onWarnings)} {...rest} />;
 }

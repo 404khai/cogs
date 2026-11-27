@@ -12,7 +12,7 @@ config.resolver.disableHierarchicalLookup = true;
 config.resolver.blockList = [/packages\/react-native\/node_modules\/.*/, /app\/node_modules\/.*/];
 const resolve = config.resolver.resolveRequest;
 config.resolver.resolveRequest = (context, name, platform) =>
-  name === '@cogs/react-native'
+  name === '@404khai/cogs-react-native'
     ? { type: 'sourceFile', filePath: path.resolve(__dirname, '../src/index.ts') }
     : (resolve ?? context.resolveRequest)(context, name, platform);
 

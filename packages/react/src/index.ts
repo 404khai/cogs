@@ -1,5 +1,5 @@
 /*
- * @cogs/react: the cogs renderer as a React library.
+ * @404khai/cogs: the cogs renderer as a React library.
  * Everything here is the studio's own code from app/src, so a cog looks and moves the same in both.
  */
 export { Cog, CogAvatar, CogTyping, resolveCog } from './Cog';

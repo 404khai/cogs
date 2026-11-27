@@ -1,5 +1,5 @@
 {
-  "name": "@cogs/react",
+  "name": "@404khai/cogs",
   "version": "0.1.0",
   "description": "Cogs for React: parametric SVG robot avatars with 20 chassis, 12 expressions and 8 display modes, built from cog JSON.",
   "license": "MIT",

@@ -2,6 +2,6 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
-    "paths": { "@cogs/react-native": ["../src/index.ts"] }
+    "paths": { "@404khai/cogs-react-native": ["../src/index.ts"] }
   }
 }
