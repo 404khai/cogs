@@ -2,6 +2,9 @@ name: cogs
 description: Cogs avatars for Flutter. Twenty machined chassis, twelve expressions and eight display modes, painted with CustomPainter from cog JSON (cogs/unit@1).
 version: 0.1.0
 repository: https://github.com/404khai/cogs/tree/main/packages/flutter
+screenshots:
+  - description: A row of cogs units
+    path: doc/cogs.png
 topics: [avatar, robot, custom-painter, animation]
 
 environment:
