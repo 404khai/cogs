@@ -3,48 +3,14 @@ import type { Rect, Optics } from '../lib/chassis';
 import type { EyeP } from '../lib/expressions';
 import type { ScreenMode } from '../lib/config';
 import { shade } from '../lib/color';
-import { gearPoints, roundedPoly } from '../lib/chassis';
-import { meshChain } from '../lib/gears';
-
-type Slot = { cx: number; cy: number; w: number; h: number; side: number };
-
-function slots(v: Rect, optics: Optics): Slot[] {
-  const cx = v.x + v.w / 2;
-  const cy = v.y + v.h / 2;
-  if (optics === 'mono') {
-    const s = Math.min(v.w * 0.6, v.h * 0.68);
-    return [{ cx, cy, w: s, h: s, side: 1 }];
-  }
-  const w = Math.min(v.w * 0.33, v.h * 0.78);
-  const h = v.h * 0.66;
-  const dx = Math.min(v.w * 0.2, w * 0.62);
-  return [
-    { cx: cx - dx, cy, w, h, side: -1 },
-    { cx: cx + dx, cy, w, h, side: 1 },
-  ];
-}
-
-const clamp = (n: number, a: number, b: number) => Math.min(b, Math.max(a, n));
+import { eyeSlots } from '../lib/face';
+import type { Slot } from '../lib/face';
+import { eyeShape, gearTrain, glyphCells, radarLayout, terminalLayout, thinkLayout, typingDots, visorFrame, waveBars } from '../lib/displays';
 
 function Eye({ slot, p, gaze, blink, id, pupils, fill, dots }: {
   slot: Slot; p: EyeP; gaze: { x: number; y: number }; blink: number; id: string; pupils: boolean; fill: string; dots: string;
 }) {
-  const { cx, cy } = slot;
-  const W = slot.w * p.sx;
-  const H = slot.h * p.sy;
-  const x0 = cx - W / 2;
-  const y0 = cy - H / 2;
-  const r = Math.min(W, H) * p.rx;
-  const topY = y0 + p.top * H;
-  const pr = Math.min(W, H) * 0.21 * p.ps;
-  const gx = clamp(p.px + gaze.x, -1, 1);
-  const gy = clamp(p.py + gaze.y, -1, 1);
-  const pcx = cx + gx * (W / 2 - pr * 1.05);
-  const pcy = cy + gy * (H / 2 - pr * 1.05);
-  // Eye shifts slightly with gaze, too, so the whole face feels alive.
-  const ox = gaze.x * slot.w * 0.06;
-  const oy = gaze.y * slot.h * 0.05;
-  const sy = 1 - blink * 0.94;
+  const { cx, cy, W, H, x0, y0, r, topY, pr, pcx, pcy, ox, oy, sy } = eyeShape(slot, p, gaze, blink);
 
   return (
     <g transform={`translate(${ox} ${oy}) translate(${cx} ${cy}) scale(1 ${sy}) translate(${-cx} ${-cy})`}>
@@ -64,20 +30,6 @@ function Eye({ slot, p, gaze, blink, id, pupils, fill, dots }: {
     </g>
   );
 }
-
-const ROBOT = [
-  '.....#.....',
-  '....###....',
-  '..#######..',
-  '..#.....#..',
-  '..#.#.#.#..',
-  '..#.....#..',
-  '..#######..',
-  '....#.#....',
-  '..#######..',
-  '.#.......#.',
-  '#.........#',
-];
 
 export type EyesProps = {
   uid: string;
@@ -99,10 +51,8 @@ export function Eyes({ uid, visor: v, optics, L, R, gaze, blink, glow, charge, p
   const dots = `${uid}-ed`;
   const filt = `${uid}-eg`;
   const amb = `${uid}-ea`;
-  const ss = slots(v, optics);
-  const cx = v.x + v.w / 2;
-  const cy = v.y + v.h / 2;
-  const unit = v.h / 100;
+  const ss = eyeSlots(v, optics);
+  const { cx, cy, unit } = visorFrame(v);
   const blur = (1.5 + charge * 4.5) * unit;
   const lit = shade(glow, 0.28);
 
@@ -112,66 +62,36 @@ export function Eyes({ uid, visor: v, optics, L, R, gaze, blink, glow, charge, p
       <Eye key={i} slot={s} p={ss.length === 1 ? L : i === 0 ? L : R} gaze={gaze} blink={blink} id={`${uid}-m${i}`} pupils={pupils} fill={fill} dots={dots} />
     ));
   } else if (mode === 'glyph') {
-    const n = ROBOT.length;
-    const cell = (v.h * 0.78) / n;
-    const ox = cx - (cell * n) / 2;
-    const oy = cy - (cell * n) / 2;
-    content = ROBOT.flatMap((row, y) =>
-      row.split('').map((ch, x) =>
-        ch === '#' ? <rect key={`${x}-${y}`} x={ox + x * cell + cell * 0.1} y={oy + y * cell + cell * 0.1} width={cell * 0.8} height={cell * 0.8} rx={cell * 0.2} fill={`url(#${fill})`} /> : null,
-      ),
-    );
+    content = glyphCells(v).map((c) => <rect key={c.key} x={c.x} y={c.y} width={c.size} height={c.size} rx={c.r} fill={`url(#${fill})`} />);
   } else if (mode === 'wave') {
-    const n = 9;
-    const bw = v.w * 0.035;
-    const gap = bw * 0.9;
-    const total = n * bw + (n - 1) * gap;
-    content = Array.from({ length: n }, (_, i) => {
-      const h = v.h * (0.22 + 0.5 * Math.sin(((i + 1) / (n + 1)) * Math.PI));
-      return (
-        <rect key={i} className="cog-wave" style={{ animationDelay: `${-i * 0.13}s`, animationDuration: `${0.7 + (i % 3) * 0.18}s` }}
-          x={cx - total / 2 + i * (bw + gap)} y={cy - h / 2} width={bw} height={h} rx={bw / 2} fill={`url(#${fill})`} />
-      );
-    });
+    content = waveBars(v).map((b, i) => (
+      <rect key={i} className="cog-wave" style={{ animationDelay: `${b.delay}s`, animationDuration: `${b.dur}s` }}
+        x={b.x} y={b.y} width={b.w} height={b.h} rx={b.r} fill={`url(#${fill})`} />
+    ));
   } else if (mode === 'dots') {
-    const r = v.h * 0.085;
-    content = [-1, 0, 1].map((k) => (
-      <circle key={k} className="cog-dot" style={{ animationDelay: `${(k + 1) * 0.16}s` }} cx={cx + k * r * 3.2} cy={cy} r={r} fill={`url(#${fill})`} />
+    content = typingDots(v).map((d) => (
+      <circle key={d.k} className="cog-dot" style={{ animationDelay: `${d.delay}s` }} cx={d.cx} cy={d.cy} r={d.r} fill={`url(#${fill})`} />
     ));
   } else if (mode === 'think') {
-    // A ring of LEDs with a light chasing round it, a breathing core and three counter-orbiting satellites.
-    const R = v.h * 0.3;
-    const n = 12;
-    const dur = 1.2;
+    const t = thinkLayout(v);
     content = (
       <g>
-        {Array.from({ length: n }, (_, i) => {
-          const a = (i / n) * Math.PI * 2 - Math.PI / 2;
-          return (
-            <circle key={i} cx={cx + R * Math.cos(a)} cy={cy + R * Math.sin(a)} r={v.h * 0.045} fill={lit} opacity={0.15}>
-              <animate attributeName="opacity" values="1;0.15;0.15" keyTimes="0;0.6;1" dur={`${dur}s`} begin={`${(i / n) * dur - dur}s`} repeatCount="indefinite" />
-            </circle>
-          );
-        })}
-        <circle cx={cx} cy={cy} r={v.h * 0.09} fill={`url(#${fill})`}>
-          <animate attributeName="r" values={`${v.h * 0.07};${v.h * 0.115};${v.h * 0.07}`} dur="1.6s" repeatCount="indefinite" />
+        {t.leds.map((l, i) => (
+          <circle key={i} cx={l.cx} cy={l.cy} r={l.r} fill={lit} opacity={0.15}>
+            <animate attributeName="opacity" values="1;0.15;0.15" keyTimes="0;0.6;1" dur={`${t.dur}s`} begin={`${l.begin}s`} repeatCount="indefinite" />
+          </circle>
+        ))}
+        <circle cx={t.cx} cy={t.cy} r={t.core.r} fill={`url(#${fill})`}>
+          <animate attributeName="r" values={`${t.core.from};${t.core.to};${t.core.from}`} dur={`${t.core.dur}s`} repeatCount="indefinite" />
         </circle>
         <g>
-          <animateTransform attributeName="transform" type="rotate" from={`360 ${cx} ${cy}`} to={`0 ${cx} ${cy}`} dur="3.6s" repeatCount="indefinite" />
-          {[0, 1, 2].map((k) => {
-            const a = (k / 3) * Math.PI * 2;
-            return <circle key={k} cx={cx + R * 0.58 * Math.cos(a)} cy={cy + R * 0.58 * Math.sin(a)} r={v.h * 0.028} fill={lit} opacity={0.75} />;
-          })}
+          <animateTransform attributeName="transform" type="rotate" from={`360 ${t.cx} ${t.cy}`} to={`0 ${t.cx} ${t.cy}`} dur={`${t.orbit.dur}s`} repeatCount="indefinite" />
+          {t.sats.map((s) => <circle key={s.k} cx={s.cx} cy={s.cy} r={s.r} fill={lit} opacity={0.75} />)}
         </g>
       </g>
     );
   } else if (mode === 'search') {
-    // Radar: a sweeping beam with a fading wake; blips flare as the beam passes them.
-    const R = v.h * 0.38;
-    const dur = 2.4;
-    const wake = (-55 * Math.PI) / 180;
-    const sw = unit * 1.3;
-    const blips: [number, number][] = [[38, 0.72], [150, 0.45], [255, 0.82], [312, 0.32]];
+    const { R, dur, sw, beam, blips } = radarLayout(v);
     content = (
       <g>
         <circle cx={cx} cy={cy} r={R} fill="none" stroke={lit} strokeOpacity={0.6} strokeWidth={sw * 1.2} />
@@ -180,98 +100,57 @@ export function Eyes({ uid, visor: v, optics, L, R, gaze, blink, glow, charge, p
         <line x1={cx} x2={cx} y1={cy - R} y2={cy + R} stroke={lit} strokeOpacity={0.28} strokeWidth={sw} />
         <g>
           <animateTransform attributeName="transform" type="rotate" from={`0 ${cx} ${cy}`} to={`360 ${cx} ${cy}`} dur={`${dur}s`} repeatCount="indefinite" />
-          <path d={`M${cx} ${cy} L${cx + R} ${cy} A${R} ${R} 0 0 0 ${cx + R * Math.cos(wake)} ${cy + R * Math.sin(wake)} Z`} fill={lit} opacity={0.38} />
+          <path d={beam} fill={lit} opacity={0.38} />
           <line x1={cx} y1={cy} x2={cx + R} y2={cy} stroke="#fff" strokeWidth={sw * 1.4} strokeLinecap="round" />
         </g>
-        {blips.map(([deg, d]) => {
-          const a = (deg * Math.PI) / 180;
-          return (
-            <circle key={deg} cx={cx + R * d * Math.cos(a)} cy={cy + R * d * Math.sin(a)} r={unit * 4.2} fill={`url(#${fill})`} opacity={0.08}>
-              <animate attributeName="opacity" values="1;0.08" dur={`${dur}s`} begin={`${(deg / 360) * dur}s`} repeatCount="indefinite" />
-            </circle>
-          );
-        })}
+        {blips.map((b) => (
+          <circle key={b.deg} cx={b.cx} cy={b.cy} r={b.r} fill={`url(#${fill})`} opacity={0.08}>
+            <animate attributeName="opacity" values="1;0.08" dur={`${dur}s`} begin={`${b.begin}s`} repeatCount="indefinite" />
+          </circle>
+        ))}
         <circle cx={cx} cy={cy} r={unit * 2.4} fill="#fff" />
       </g>
     );
   } else if (mode === 'code') {
-    // A terminal: dot-matrix code scrolls up, a prompt waits at the bottom with a blinking block cursor.
-    const rows = [[0, 0.22, 0.4], [0.1, 0.3], [0.1, 0.16, 0.24, 0.12], [0.2, 0.36], [0.1, 0.2], [0, 0.08]];
-    const rowH = v.h * 0.13;
-    const tw = Math.min(v.w * 0.72, v.h * 1.4);
-    const x0 = cx - tw / 2;
-    const block = rows.length * rowH;
-    const top = v.y + v.h * 0.14;
-    const bh = rowH * 0.42;
+    const t = terminalLayout(v);
     const clip = `${uid}-cc`;
-    const promptY = v.y + v.h * 0.8;
     content = (
       <g>
         <defs>
           <clipPath id={clip}>
-            <rect x={v.x} y={v.y} width={v.w} height={v.h * 0.66} />
+            <rect x={t.clip.x} y={t.clip.y} width={t.clip.w} height={t.clip.h} />
           </clipPath>
         </defs>
         <g clipPath={`url(#${clip})`}>
           <g>
-            <animateTransform attributeName="transform" type="translate" from="0 0" to={`0 ${-block}`} dur={`${rows.length * 0.6}s`} repeatCount="indefinite" />
-            {[-1, 0, 1, 2].flatMap((copy) =>
-              rows.map((r, i) => {
-                const y = top + (copy * rows.length + i) * rowH;
-                let x = x0 + r[0] * tw;
-                return r.slice(1).map((w, j) => {
-                  const el = <rect key={`${copy}-${i}-${j}`} x={x} y={y} width={w * tw} height={bh} rx={bh / 2} fill={j === 0 ? '#fff' : lit} opacity={j === 0 ? 0.95 : 0.7} />;
-                  x += w * tw + bh * 0.9;
-                  return el;
-                });
-              }),
-            )}
+            <animateTransform attributeName="transform" type="translate" from="0 0" to={`0 ${-t.scroll.by}`} dur={`${t.scroll.dur}s`} repeatCount="indefinite" />
+            {t.tokens.map((k) => (
+              <rect key={k.key} x={k.x} y={k.y} width={k.w} height={k.h} rx={k.r} fill={k.head ? '#fff' : lit} opacity={k.head ? 0.95 : 0.7} />
+            ))}
           </g>
         </g>
-        <polyline points={`${x0},${promptY - bh * 0.7} ${x0 + bh * 0.8},${promptY} ${x0},${promptY + bh * 0.7}`} fill="none" stroke={lit} strokeWidth={unit * 2.4} strokeLinecap="round" strokeLinejoin="round" />
-        <rect x={x0 + bh * 2} y={promptY - rowH * 0.36} width={rowH * 0.42} height={rowH * 0.72} rx={unit} fill="#fff">
+        <polyline points={t.prompt} fill="none" stroke={lit} strokeWidth={t.unit * 2.4} strokeLinecap="round" strokeLinejoin="round" />
+        <rect x={t.cursor.x} y={t.cursor.y} width={t.cursor.w} height={t.cursor.h} rx={t.cursor.r} fill="#fff">
           <animate attributeName="opacity" values="1;0" dur="1s" calcMode="discrete" repeatCount="indefinite" />
         </rect>
       </g>
     );
   } else {
-    // Working: a train of solid LED gears meshing and turning, sized to fit any visor.
-    const train = meshChain(1, { z: 12, cx: 0, cy: 0 }, [{ z: 8, deg: -32 }, { z: 10, deg: 48 }]);
-    const ext = train.map((g) => ({ x0: g.cx - g.z / 2 - 1, x1: g.cx + g.z / 2 + 1, y0: g.cy - g.z / 2 - 1, y1: g.cy + g.z / 2 + 1 }));
-    const bx0 = Math.min(...ext.map((e) => e.x0));
-    const bx1 = Math.max(...ext.map((e) => e.x1));
-    const by0 = Math.min(...ext.map((e) => e.y0));
-    const by1 = Math.max(...ext.map((e) => e.y1));
-    const m = Math.min((v.w * 0.84) / (bx1 - bx0), (v.h * 0.84) / (by1 - by0));
-    const ox = cx - ((bx0 + bx1) / 2) * m;
-    const oy = cy - ((by0 + by1) / 2) * m;
     content = (
       <g>
-        {train.map((g, i) => {
-          const gx = ox + g.cx * m;
-          const gy = oy + g.cy * m;
-          const pitch = (m * g.z) / 2;
-          const body = roundedPoly(gearPoints(gx, gy, g.z, pitch - m * 1.2, pitch + m, g.phase), m * 0.25);
-          const holes = g.z >= 10 ? 4 : 0;
-          return (
-            <g key={i}>
-              <animateTransform attributeName="transform" type="rotate" from={`0 ${gx} ${gy}`} to={`${360 * g.dir} ${gx} ${gy}`} dur={`${g.z * 0.32}s`} repeatCount="indefinite" />
-              <path d={body} fill={`url(#${fill})`} />
-              <path d={body} fill={`url(#${dots})`} />
-              {Array.from({ length: holes }, (_, k) => {
-                const a = g.phase + (k / holes) * Math.PI * 2 + Math.PI / holes;
-                return <circle key={k} cx={gx + Math.cos(a) * pitch * 0.55} cy={gy + Math.sin(a) * pitch * 0.55} r={pitch * 0.15} fill="#04070a" />;
-              })}
-              <circle cx={gx} cy={gy} r={pitch * 0.24} fill="#04070a" />
-              <circle cx={gx} cy={gy} r={pitch * 0.09} fill={lit} />
-            </g>
-          );
-        })}
+        {gearTrain(v).map((g, i) => (
+          <g key={i}>
+            <animateTransform attributeName="transform" type="rotate" from={`0 ${g.gx} ${g.gy}`} to={`${360 * g.dir} ${g.gx} ${g.gy}`} dur={`${g.dur}s`} repeatCount="indefinite" />
+            <path d={g.body} fill={`url(#${fill})`} />
+            <path d={g.body} fill={`url(#${dots})`} />
+            {g.holes.map((h, k) => <circle key={k} cx={h.cx} cy={h.cy} r={h.r} fill="#04070a" />)}
+            <circle cx={g.gx} cy={g.gy} r={g.pitch * 0.24} fill="#04070a" />
+            <circle cx={g.gx} cy={g.gy} r={g.pitch * 0.09} fill={lit} />
+          </g>
+        ))}
       </g>
     );
   }
-
-
 
   return (
     <g opacity={0.35 + 0.65 * Math.min(1, charge * 1.4)}>
