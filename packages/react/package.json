@@ -1,0 +1,40 @@
+{
+  "name": "@cogs/react",
+  "version": "0.1.0",
+  "description": "Cogs for React: parametric SVG robot avatars with 20 chassis, 12 expressions and 8 display modes, built from cog JSON.",
+  "license": "MIT",
+  "type": "module",
+  "repository": { "type": "git", "url": "git+https://github.com/404khai/cogs.git", "directory": "packages/react" },
+  "homepage": "https://github.com/404khai/cogs/tree/main/packages/react#readme",
+  "keywords": ["react", "avatar", "robot", "svg", "bot", "agent", "cogs"],
+  "sideEffects": ["*.css"],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
+      "require": { "types": "./dist/index.d.cts", "default": "./dist/index.cjs" }
+    },
+    "./styles.css": "./dist/styles.css",
+    "./package.json": "./package.json"
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsup && cp src/styles.css dist/styles.css",
+    "typecheck": "tsc --noEmit",
+    "test": "bun run build && bun test",
+    "prepublishOnly": "bun run build"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tsup": "^8.5.0",
+    "typescript": "~5.9.3"
+  }
+}

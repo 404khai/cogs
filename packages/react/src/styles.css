@@ -1,0 +1,39 @@
+/*
+ * @cogs/react styles: import once, e.g. `import '@cogs/react/styles.css'`.
+ * The voice and typing displays animate with CSS; CogAvatar and CogTyping are styled here.
+ * Rules are lifted from the studio (app/src/index.css, app/src/kit/kit.css). Theme them with the custom properties below.
+ */
+:where(:root) {
+  --cogs-line: rgba(14, 17, 22, 0.12);
+  --cogs-paper: #fbfbf8;
+  --cogs-ink-2: #4a505c;
+  --cogs-ink-3: #8b909a;
+}
+
+/* displays: voice waveform and typing dots on the visor */
+.cog-wave { transform-box: fill-box; transform-origin: center; animation: cogs-wave 0.8s ease-in-out infinite alternate; }
+@keyframes cogs-wave { from { transform: scaleY(0.25); } to { transform: scaleY(1); } }
+.cog-dot { animation: cogs-dot 1.1s ease-in-out infinite; }
+@keyframes cogs-dot { 0%, 60%, 100% { transform: translateY(0); opacity: 0.55; } 30% { transform: translateY(-9px); opacity: 1; } }
+
+/* avatar */
+.cog-avatar { position: relative; display: inline-grid; flex: none; box-sizing: border-box; border-radius: 26%; background: linear-gradient(#fbfbf8, #e9ebee); box-shadow: inset 0 0 0 1px var(--cogs-line), inset 0 -2px 0 rgba(0, 0, 0, 0.06); }
+.cog-avatar svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.cog-avatar-lamp { position: absolute; right: 1px; bottom: 1px; width: 24%; height: 24%; border-radius: 50%; background: #6b7280; }
+.cog-avatar.online .cog-avatar-lamp { background: #19c27a; box-shadow: 0 0 6px #19c27a; }
+.cog-avatar.busy .cog-avatar-lamp { background: #ffb23f; animation: cogs-lamp 1.4s ease-in-out infinite; }
+.cog-avatar.away .cog-avatar-lamp { background: #c9cdd4; }
+.cog-avatar.offline { filter: grayscale(0.85); opacity: 0.7; }
+@keyframes cogs-lamp { 50% { opacity: 0.4; } }
+
+/* typing */
+.cog-typing { display: inline-flex; align-items: center; gap: 9px; padding: 5px 12px 5px 5px; border: 1px solid var(--cogs-line); background: var(--cogs-paper); border-radius: 99px; font-size: 14px; color: var(--cogs-ink-2); width: fit-content; }
+.cog-typing .cog-avatar { padding: 3px; border-radius: 50%; }
+.cog-typing-dots { display: inline-flex; gap: 3px; }
+.cog-typing-dots i { width: 4px; height: 4px; border-radius: 50%; background: var(--cogs-ink-3); animation: cogs-dot 1s ease-in-out infinite; }
+.cog-typing-dots i:nth-child(2) { animation-delay: 0.15s; }
+.cog-typing-dots i:nth-child(3) { animation-delay: 0.3s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cog-wave, .cog-dot, .cog-typing-dots i, .cog-avatar.busy .cog-avatar-lamp { animation: none; }
+}
