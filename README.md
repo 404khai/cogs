@@ -19,8 +19,46 @@
 - **JSON in and out.** Copy, download, edit, paste or upload JSON to rebuild a cog. Pasting cog JSON anywhere on the page builds it.
 - **Docs and changelog.** `/docs` is the manual, with ⌘K search and live chassis and expression galleries. `/changelog` lists every release.
 - **Components.** `/components` has drop-in pieces for apps with a cog in them: CogComposer (a machined chat console with the bot perched in a cradle and a voice-reactive LED channel), CogRing (a machined voice ring), CogAvatar with presence, CogTyping, CogBelt (Sprocket units chained by coloured timing belts), a gear loader and a task card.
+- **Packages.** `@cogs/react`, `@cogs/react-native` and `cogs` for Flutter render the same units from cog JSON in your own app. See [Install](#install).
 - **Self-assembling roster.** Roster units draft themselves in blueprint lines, then get paint, fasteners, a visor and power as they scroll into view.
 - **The assembly line.** In the footer, a meshing gear train drives a conveyor, and units ride through a QA scanner while Flange supervises.
+
+## Install
+
+Put cogs in your own app. Every package takes the same [Cog JSON](#cog-json), so a unit built in the studio looks the same on every platform.
+
+**React**
+
+```sh
+bun add @cogs/react
+npm install @cogs/react
+pnpm add @cogs/react
+```
+
+```tsx
+import { Cog } from '@cogs/react';
+import '@cogs/react/styles.css';
+
+<Cog unit={flange} size={96} />
+```
+
+**React Native**
+
+```sh
+bun add @cogs/react-native react-native-svg
+npm install @cogs/react-native react-native-svg
+pnpm add @cogs/react-native react-native-svg
+```
+
+`react-native-svg` is a peer dependency. On a bare app, run `pod install` in `ios/` afterwards; on Expo, use `npx expo install @cogs/react-native react-native-svg`.
+
+**Flutter**
+
+```sh
+flutter pub add cogs
+```
+
+Each block lists the same install for bun, npm and pnpm: run one. `/docs/install` and `/components` show the same commands with a bun / npm / pnpm switcher and a copy button.
 
 ## Cog JSON
 
@@ -78,6 +116,7 @@ app/src/
   lib/expressions.ts        expression parameters; add a mood here
   components/Gearworks.tsx  the footer assembly line (meshing gear train + conveyor)
   components/SiteChrome.tsx shared nav and footer
+  components/InstallTabs.tsx install commands with bun / npm / pnpm tabs, used by /docs and /components
   docs/                     /docs: shell, search, ruler rail and page content
   kit/                      /components: CogKit.tsx (the components), the page, and archive/ for retired parts
   changelog/Changelog.tsx   /changelog: add new releases at the top of ENTRIES

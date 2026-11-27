@@ -6,6 +6,7 @@ import type { CogConfig } from '../lib/config';
 import { GH } from '../lib/site';
 import { Cog } from '../components/Cog';
 import { EyeTile } from '../components/ui';
+import { InstallTabs } from '../components/InstallTabs';
 
 /* ── Code blocks with a tiny highlighter ───────────────── */
 function highlight(line: string, lang: string): ReactNode[] {
@@ -121,6 +122,68 @@ bun run dev  # http://localhost:5173`}</Code>
               <code>bun run build</code> type-checks and builds the studio, docs and changelog into <code>dist/</code>.
             </p>
           </>
+        ),
+      },
+    ],
+  },
+  {
+    id: 'install',
+    title: 'Install',
+    group: 'Get started',
+    summary: 'Put cogs in your own app: packages for React, React Native and Flutter.',
+    unit: { chassis: 'gear', color: '#e8603f', expression: 'happy' },
+    sections: [
+      {
+        title: 'React',
+        body: (
+          <>
+            <p>
+              <code>@cogs/react</code> renders units and the parts from <a href="/components">/components</a> in any React app. Pick your package manager; the choice carries across the page.
+            </p>
+            <InstallTabs platform="react" />
+            <p>It needs React 18 or later. Import the stylesheet once, then render a unit from its JSON:</p>
+            <Code lang="tsx" title="App.tsx">{`import { Cog } from '@cogs/react';
+import '@cogs/react/styles.css';
+import flange from './flange.json';  // copied from panel 09
+
+export const Avatar = () => <Cog unit={flange} size={96} />;`}</Code>
+          </>
+        ),
+      },
+      {
+        title: 'React Native',
+        body: (
+          <>
+            <p>
+              <code>@cogs/react-native</code> brings the same units to iOS and Android. It draws with <code>react-native-svg</code>, so the command installs that too.
+            </p>
+            <InstallTabs platform="react-native" />
+            <p>
+              On a bare React Native app, run <code>pod install</code> in <code>ios/</code> afterwards. On Expo, use <code>npx expo install @cogs/react-native react-native-svg</code> so the versions match your SDK. The component mirrors the React one, with a <code>gaze</code> prop in place of pointer tracking:
+            </p>
+            <Code lang="tsx" title="Avatar.tsx">{`import { Cog } from '@cogs/react-native';
+
+export const Avatar = () => <Cog unit={flange} size={96} gaze={{ x: 0.3, y: 0 }} />;`}</Code>
+          </>
+        ),
+      },
+      {
+        title: 'Flutter',
+        body: (
+          <>
+            <p>
+              The <code>cogs</code> package on pub.dev. Run this from your Flutter project; it adds the dependency to <code>pubspec.yaml</code>.
+            </p>
+            <InstallTabs platform="flutter" />
+          </>
+        ),
+      },
+      {
+        title: 'Bring a cog',
+        body: (
+          <p>
+            Every package takes the same <a href="/docs/json">Cog JSON</a>, so a unit you build in the studio looks the same on every platform. Copy it from panel 09 and pass it in.
+          </p>
         ),
       },
     ],
